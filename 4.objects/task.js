@@ -21,7 +21,7 @@ Student.prototype.addMarks = function(...marks) {
 }
   
 Student.prototype.getAverage = function() {
-  if (this.marks === undefined || this.marks === []) {
+  if (this.marks === undefined || this.marks.length === 0) {
     return 0;
   } else {
       return this.marks.reduce((accum, current) => accum + current, 0) / this.marks.length;
