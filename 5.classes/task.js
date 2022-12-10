@@ -175,14 +175,13 @@ class Student {
     }
 
     getAverage() {
-        if (this.marks === {}) {
+        if (Object.keys(this.marks).length === 0) {
             return 0;
-        } else {
+        } 
         let sum = 0;
         for (let key of Object.keys(this.marks)) {
             sum += this.getAverageBySubject(key);
         }
         return sum / Object.keys(this.marks).length;
-    }
     }
 }
