@@ -26,34 +26,31 @@ class Triangle {
             throw new Error ("Треугольник с такими сторонами не существует");
         }    
         
-        }
-    get perimeter() {
-        return this._perimeter;
-    }
-    set perimeter(perimeter) {
-        this._perimeter = perimeter;
     }
     
-    get area() {
-        //let halfPerimeter = this.perimeter/2;
-        //let square = Math.sqrt(halfPerimeter*(halfPerimeter - a)*(halfPerimeter - b)*(halfPerimeter - c));
-        return this._area;
-    }
-    set area(area) {
-        this._area = area;
-    }
-
-    getTriangle(a, b, c) {
-        try {
-            return new Triangle();
-        } catch (error) {
-            if (this._perimeter instanceof String || this._area instanceof String) {
-                const obj = new Triangle(this.perimeter = "Ошибка! Треугольник не существует", this.area = "Ошибка! Треугольник не существует");
-                return obj;
-            }
-        }
-    }
 }
-//const triangle = new Triangle(6,10,15);
-//triangle.perimeter = "неправильное значение";
-//triangle.area = "неправильное значение";
+function getTriangle(a, b, c) {
+        
+    try {return new Triangle();
+    } catch (error) {
+        return Triangle = {
+            get perimeter() {console.log("Ошибка! Треугольник не существует")},
+            get area() {console.log("Ошибка! Треугольник не существует")}
+        }
+}
+}        
+var newTriangle = {
+    a: 6,
+    b: 10,
+    c: 15,
+    get perimeter() {return this.a + this.b + this.c},
+    get area() {return +Math.sqrt(this.perimeter/2*(this.perimeter/2 - this.a)*(this.perimeter/2 - this.b)*(this.perimeter/2 - this.c)).toFixed(3)}
+}    
+
+/*try {
+    if (this._perimeter instanceof String || this._area instanceof String) {
+    throw new Error("Ошибка! Треугольник не существует");
+}  else {return new Triangle(a, b, c);}
+}    catch (error){
+    return Triangle.
+}*/
