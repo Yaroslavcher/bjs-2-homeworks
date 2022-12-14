@@ -54,6 +54,6 @@ class Triangle {
         }
     }
 }
-const triangle = new Triangle(6,10,15);
-triangle.perimeter = "неправильное значение";
-triangle.area = "неправильное значение";
+//const triangle = new Triangle(6,10,15);
+//triangle.perimeter = "неправильное значение";
+//triangle.area = "неправильное значение";
