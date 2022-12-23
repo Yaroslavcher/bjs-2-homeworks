@@ -1,33 +1,27 @@
 "use strict";
 class AlarmClock {
-    constructor(alarmCollection = [], intervalId) {
+    constructor(alarmCollection = [], intervalId = null) {
         this.alarmCollection = alarmCollection;
         this.intervalId = intervalId;
     }
 
     addClock(time, callback) {
+        this.time = time;
         
-        let func = () => callback();
-
-        /*if (time === undefined || callback === undefined) {
+        if (this.time === null || callback === undefined) {
             throw new Error("Отсутствуют обязательные аргументы");
-        }*/
+        }
 
         if (time in this.alarmCollection) {
             console.warn('Уже присутствует звонок на это же время')
         }
 
-            
-        this.alarmCollection.push({id: null, time, canCall: true});
+        this.alarmCollection.push({time: time, callback: callback, canCall: true});
     }
 
     removeClock(time) {           //удаляет звонок с определенным временем time
-        let alarmCollectionBeforeRemove = this.alarmCollection.length;    
-        const result = this.alarmCollection.filter(removedClock => removedClock[time] === time);
-            if (alarmCollectionBeforeRemove > this.alarmCollection.length) {
-                return console.log("Звонок №${id} удален.");
-            }
-        }
+        this.alarmCollection = this.alarmCollection.filter(removedClock => removedClock.time !== time);
+    }
     
     getCurrentFormattedTime(){  //возвращает текущее время как строку "ЧЧ:ММ"
         let fmt = t => ("" + t).padStart(2, '0');
@@ -59,13 +53,18 @@ class AlarmClock {
     }
 
     resetAllCalls() {
-        this.alarmCollection.canCall.forEach(canCall => {canCall = true});
+        this.alarmCollection.canCall.forEach(canCall => canCall = true);
     }
 
     clearAlarms() {
         this.stop;
         this.alarmCollection = [];
+        if (this.time === null) {
+            throw new Error ("Время не было передано");
+        }
     }
+
+
 }
     
 
