@@ -1,22 +1,21 @@
 "use strict";
 class AlarmClock {
-    constructor(alarmCollection = [], intervalId = null) {
-        this.alarmCollection = alarmCollection;
-        this.intervalId = intervalId;
+    constructor() {
+        this.alarmCollection = [];
+        this.intervalId = null;
     }
 
     addClock(time, callback) {
-        this.time = time;
-        
-        if (this.time === null || callback === undefined) {
+        if (time === null || callback === undefined) {
             throw new Error("Отсутствуют обязательные аргументы");
         }
 
-        if (time in this.alarmCollection) {
+        //if (time in this.alarmCollection)
+        if (this.alarmCollection.some(alarm => alarm.time === time)) {
             console.warn('Уже присутствует звонок на это же время')
         }
 
-        this.alarmCollection.push({time: time, callback: callback, canCall: true});
+        this.alarmCollection.push({time, callback, canCall: true});
     }
 
     removeClock(time) {           //удаляет звонок с определенным временем time
@@ -25,8 +24,7 @@ class AlarmClock {
     
     getCurrentFormattedTime(){  //возвращает текущее время как строку "ЧЧ:ММ"
         let fmt = t => ("" + t).padStart(2, '0');
-        let currFormattedTime = fmt(new Date().getHours()) + ":" + fmt(new Date().getMinutes());
-        return currFormattedTime;
+        return fmt(new Date().getHours()) + ":" + fmt(new Date().getMinutes());
     }
 
     start() {
@@ -36,15 +34,16 @@ class AlarmClock {
                 this.callback();
             }*/
 
-        if (this.intervalId !== undefined) {
+        if (this.intervalId !== null) {
                 return; 
+        }
+        let func = this.alarmCollection.forEach(alarm => {
+            if (alarm.time === this.getCurrentFormattedTime() && alarm.canCall) {
+                this.alarm.canCall = false;
+                this.alarm.callback = callback();
             }
-        this.intervalId = setInterval(this.alarmCollection.forEach(time => {
-            if (this.alarmCollection.time === getCurrentFormattedTime() && this.alarmCollection.canCall) {
-                this.alarmCollection.canCall = false;
-                callback();
-            }}), 1000)
-
+        });
+        this.intervalId = setInterval(func, 1000);
     }
 
     stop() {
@@ -53,15 +52,19 @@ class AlarmClock {
     }
 
     resetAllCalls() {
-        this.alarmCollection.canCall.forEach(canCall => canCall = true);
+        this.alarmCollection.forEach(alarm => alarm.canCall = true);
+        //let clock = new AlarmClock();
+        //for (this.alarmCollection.canCall in this.alarmCollection) {
+          // this.alarmCollection.canCall = true;
+        //}
     }
 
     clearAlarms() {
-        this.stop;
+        this.stop();
         this.alarmCollection = [];
-        if (this.time === null) {
+        /*if (this.time === null) {
             throw new Error ("Время не было передано");
-        }
+        }*/
     }
 
 
