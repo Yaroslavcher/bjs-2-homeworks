@@ -1,73 +1,53 @@
 "use strict";
 class AlarmClock {
-    constructor() {
-        this.alarmCollection = [];
-        this.intervalId = null;
+  constructor() {
+    this.alarmCollection = [];
+    this.intervalId = null;
+  }
+
+  addClock(time, callback) {
+    if (!time || callback === undefined) {
+      throw new Error("Отсутствуют обязательные аргументы");
     }
 
-    addClock(time, callback) {
-        if (time === null || callback === undefined) {
-            throw new Error("Отсутствуют обязательные аргументы");
-        }
-
-        //if (time in this.alarmCollection)
-        if (this.alarmCollection.some(alarm => alarm.time === time)) {
-            console.warn('Уже присутствует звонок на это же время')
-        }
-
-        this.alarmCollection.push({time, callback, canCall: true});
+    if (this.alarmCollection.some(alarm => alarm.time === time)) {
+      console.warn('Уже присутствует звонок на это же время')
     }
 
-    removeClock(time) {           //удаляет звонок с определенным временем time
-        this.alarmCollection = this.alarmCollection.filter(removedClock => removedClock.time !== time);
+    this.alarmCollection.push({time, callback, canCall: true});
+  }
+
+  removeClock(time) {       //удаляет звонок с определенным временем time
+    this.alarmCollection = this.alarmCollection.filter(alarm => alarm.time !== time);
+  }
+  
+  getCurrentFormattedTime(){  //возвращает текущее время как строку "ЧЧ:ММ"
+    return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit"});
+  }
+
+  start() {
+    if (this.intervalId) {
+      return; 
     }
-    
-    getCurrentFormattedTime(){  //возвращает текущее время как строку "ЧЧ:ММ"
-        let fmt = t => ("" + t).padStart(2, '0');
-        return fmt(new Date().getHours()) + ":" + fmt(new Date().getMinutes());
-    }
+    this.intervalId = setInterval(() => this.alarmCollection.forEach(alarm => {
+      if (alarm.time === this.getCurrentFormattedTime() && alarm.canCall) {
+        alarm.canCall = false;
+        alarm.callback();
+      }
+    }), 1000);
+  }
 
-    start() {
-        /*function checkClock() {
-            let clockTime = this.alarmCollection[time];
-            if (getCurrentFormattedTime() === clockTime) {
-                this.callback();
-            }*/
+  stop() {
+    clearInterval(this.intervalId);
+    this.intervalId = null;
+  }
 
-        if (this.intervalId !== null) {
-                return; 
-        }
-        let func = this.alarmCollection.forEach(alarm => {
-            if (alarm.time === this.getCurrentFormattedTime() && alarm.canCall) {
-                this.alarm.canCall = false;
-                this.alarm.callback = callback();
-            }
-        });
-        this.intervalId = setInterval(func, 1000);
-    }
+  resetAllCalls() {
+    this.alarmCollection.forEach(alarm => alarm.canCall = true);
+  }
 
-    stop() {
-        clearInterval(this.intervalId);
-        this.intervalId = null;
-    }
-
-    resetAllCalls() {
-        this.alarmCollection.forEach(alarm => alarm.canCall = true);
-        //let clock = new AlarmClock();
-        //for (this.alarmCollection.canCall in this.alarmCollection) {
-          // this.alarmCollection.canCall = true;
-        //}
-    }
-
-    clearAlarms() {
-        this.stop();
-        this.alarmCollection = [];
-        /*if (this.time === null) {
-            throw new Error ("Время не было передано");
-        }*/
-    }
-
-
+  clearAlarms() {
+    this.stop();
+    this.alarmCollection = [];
+  }
 }
-    
-
