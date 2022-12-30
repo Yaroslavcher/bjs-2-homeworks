@@ -25,21 +25,25 @@ const addAndMultiply = (a, b, c) => (a + c) * c;
 const cachedAddAndMultiply = cachingDecoratorNew(addAndMultiply);
 
 //Задача № 2
+//func(...args);
 function debounceDecoratorNew(func, delay) {
   let timeoutId = null;
   return function(...args) {
     if(timeoutId){
-      console.log("удалил текущий таймаут");
-      clearTimeout(timeoutId);
-      } else {
-        let delay = 0;
+      clearTimeout(timeoutId);  //удалил текущий таймаут
+      // } else {
+      //   let delay = 0;
   }
-    console.log("создаю новый таймаут");
-    timeoutId = setTimeout(() => {
-      timeoutId = null;
-      console.log(func(...args));
-      console.log("вызвал колбэк");
-    }, delay);
+    //let callNumber = 1;
+    if (!timeoutId) {
+      timeoutId = true;
+      func(...args);
+      timeoutId = setTimeout(() => {
+        timeoutId = null;
+        console.log(func(...args)); //вызвал колбэк
+      }, delay);
+    }
+   
   }
 }
 
